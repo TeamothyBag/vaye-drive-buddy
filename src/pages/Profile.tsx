@@ -1,19 +1,21 @@
-import { Camera, Star, Car, FileText, Settings, LogOut } from "lucide-react";
+import { Camera, Star, Car, FileText, Settings as SettingsIcon, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import BottomNav from "@/components/dashboard/BottomNav";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Profile = () => {
   const navigate = useNavigate();
+  const { logout, user } = useAuth();
 
   const driverData = {
-    name: "Demo Driver",
-    email: "demo@vaye.com",
-    phone: "+27 12 345 6789",
-    rating: 4.8,
+    name: user?.name || "Demo Driver",
+    email: user?.email || "demo@vaye.com",
+    phone: user?.phone || "+27 12 345 6789",
+    rating: user?.rating || 4.8,
     totalRides: 1247,
     memberSince: "Jan 2023",
     vehicle: {
@@ -31,10 +33,8 @@ const Profile = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("vaye_token");
-    localStorage.removeItem("vaye_user");
+    logout();
     toast.success("Logged out successfully");
-    navigate("/login");
   };
 
   return (
@@ -127,12 +127,22 @@ const Profile = () => {
 
         {/* Quick Actions */}
         <div className="space-y-3">
-          <Button variant="outline" className="w-full justify-start" size="lg">
+          <Button 
+            variant="outline" 
+            className="w-full justify-start" 
+            size="lg"
+            onClick={() => toast.info("Documents feature coming soon")}
+          >
             <FileText className="w-5 h-5 mr-3" />
             Documents
           </Button>
-          <Button variant="outline" className="w-full justify-start" size="lg">
-            <Settings className="w-5 h-5 mr-3" />
+          <Button 
+            variant="outline" 
+            className="w-full justify-start" 
+            size="lg"
+            onClick={() => navigate("/settings")}
+          >
+            <SettingsIcon className="w-5 h-5 mr-3" />
             Settings
           </Button>
           <Button
