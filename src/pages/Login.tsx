@@ -5,9 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Loader2, Car } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -19,17 +21,7 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Mock successful login
-      localStorage.setItem("vaye_token", "mock_token");
-      localStorage.setItem("vaye_user", JSON.stringify({
-        name: "Demo Driver",
-        email: formData.email,
-        role: "driver",
-      }));
-      
+      await login(formData.email, formData.password);
       toast.success("Welcome back!");
       navigate("/dashboard");
     } catch (error) {
