@@ -8,89 +8,109 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
+    /* Vaye Brand Colors - HSL Format */
+    --vaye-yellow: 48 100% 62%;        /* #ffd93d - Primary brand */
+    --vaye-yellow-light: 48 100% 64%;   /* #ffed4a */
+    --vaye-yellow-dark: 43 100% 50%;    /* #ffb800 */
+    --vaye-navy: 230 56% 25%;           /* #1e2761 - Secondary brand */
+    --vaye-navy-light: 230 48% 36%;     /* #2a3990 */
+    --vaye-navy-dark: 230 56% 18%;      /* #171d4a */
+    
+    /* Base Colors */
+    --background: 216 33% 97%;          /* #f8fafc */
+    --foreground: 222 47% 11%;          /* #0f172a */
+    
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
+    --card-foreground: 222 47% 11%;
+    
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --popover-foreground: 222 47% 11%;
+    
+    /* Primary = Vaye Yellow */
+    --primary: 48 100% 62%;
+    --primary-foreground: 230 56% 25%;
+    
+    /* Secondary = Vaye Navy */
+    --secondary: 230 56% 25%;
+    --secondary-foreground: 0 0% 100%;
+    
+    --muted: 214 32% 91%;
+    --muted-foreground: 215 16% 47%;
+    
+    --accent: 48 100% 62%;
+    --accent-foreground: 230 56% 25%;
+    
+    /* Functional Colors */
+    --success: 142 71% 45%;             /* #4caf50 */
+    --success-foreground: 0 0% 100%;
+    
+    --destructive: 0 84% 60%;           /* #ef4444 */
+    --destructive-foreground: 0 0% 100%;
+    
+    --warning: 38 92% 50%;              /* #f59e0b */
+    --warning-foreground: 0 0% 100%;
+    
+    --info: 217 91% 60%;                /* #3b82f6 */
+    --info-foreground: 0 0% 100%;
+    
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 48 100% 62%;
+    
+    --radius: 0.75rem;
+    
+    /* Gradients */
+    --gradient-yellow: linear-gradient(135deg, hsl(48 100% 62%) 0%, hsl(48 100% 64%) 100%);
+    --gradient-navy: linear-gradient(135deg, hsl(230 56% 25%) 0%, hsl(230 48% 36%) 100%);
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 20px rgba(148, 163, 184, 0.12);
+    --shadow-lg: 0 8px 30px rgba(148, 163, 184, 0.18);
+    --shadow-yellow: 0 4px 20px rgba(255, 217, 61, 0.3);
+    
+    /* Glass Effect */
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(226, 232, 240, 0.6);
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 222 47% 11%;
     --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
+    
+    --card: 230 56% 18%;
     --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
+    
+    --popover: 230 56% 18%;
     --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
+    
+    --primary: 48 100% 62%;
+    --primary-foreground: 230 56% 25%;
+    
+    --secondary: 230 48% 36%;
     --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
+    
+    --muted: 230 56% 18%;
+    --muted-foreground: 215 20% 65%;
+    
+    --accent: 48 100% 62%;
+    --accent-foreground: 230 56% 25%;
+    
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+    
+    --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    
+    --border: 230 56% 18%;
+    --input: 230 56% 18%;
+    --ring: 48 100% 62%;
+    
+    --glass-bg: rgba(30, 39, 97, 0.8);
+    --glass-border: rgba(148, 163, 184, 0.3);
   }
 }
 
@@ -100,6 +120,42 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  
+  /* Mobile-first optimizations */
+  html {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+}
+
+@layer utilities {
+  /* Glass morphism utility */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+  }
+  
+  /* Smooth transitions */
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Yellow gradient background */
+  .bg-gradient-yellow {
+    background: linear-gradient(135deg, hsl(var(--vaye-yellow)) 0%, hsl(var(--vaye-yellow-light)) 100%);
+  }
+  
+  /* Navy gradient background */
+  .bg-gradient-navy {
+    background: linear-gradient(135deg, hsl(var(--vaye-navy)) 0%, hsl(var(--vaye-navy-light)) 100%);
+  }
+  
+  /* Shadow utilities */
+  .shadow-yellow {
+    box-shadow: 0 4px 20px rgba(255, 217, 61, 0.3);
   }
 }
