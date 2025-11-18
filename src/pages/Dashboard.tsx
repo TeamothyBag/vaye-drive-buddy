@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, Bell, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +11,9 @@ import EarningsModal from "@/components/dashboard/EarningsModal";
 import { useTrip } from "@/contexts/TripContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useGeolocation } from "@/hooks/useGeolocation";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
+import { useNetwork } from "@/hooks/useNetwork";
 
 const Dashboard = () => {
   const { 
@@ -28,14 +31,27 @@ const Dashboard = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showEarningsModal, setShowEarningsModal] = useState(false);
   const [notificationCount] = useState(3);
-  const [currentLocation, setCurrentLocation] = useState<{ lat: number; lng: number } | null>(null);
+  
+  // Native hooks
+  const { currentPosition, isTracking, startTracking, stopTracking, getCurrentPosition } = useGeolocation();
+  const { isRegistered: pushEnabled } = usePushNotifications((data) => {
+    console.log("Push notification received:", data);
+  });
+  const { isOnline: networkOnline } = useNetwork();
 
-  const handleGoOnline = () => {
+  const handleGoOnline = async () => {
+    if (!networkOnline) {
+      toast.error("No internet connection");
+      return;
+    }
+    
+    await startTracking();
     setIsOnline(true);
     toast.success("You're now online and will receive ride requests");
   };
 
-  const handleGoOffline = () => {
+  const handleGoOffline = async () => {
+    await stopTracking();
     setIsOnline(false);
     toast.info("You're now offline");
   };
@@ -49,24 +65,19 @@ const Dashboard = () => {
     declineRide();
   };
 
-  const handleGetLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setCurrentLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
-          toast.success("Location updated");
-        },
-        (error) => {
-          toast.error("Could not get your location");
-        }
-      );
-    } else {
-      toast.error("Geolocation is not supported");
+  const handleGetLocation = async () => {
+    const position = await getCurrentPosition();
+    if (position) {
+      toast.success("Location updated");
     }
   };
+
+  // Show network status changes
+  useEffect(() => {
+    if (!networkOnline && isOnline) {
+      toast.error("Connection lost. Please check your internet.");
+    }
+  }, [networkOnline, isOnline]);
 
   return (
     <div className="h-screen flex flex-col bg-background">
@@ -131,7 +142,7 @@ const Dashboard = () => {
           onClick={handleGetLocation}
           className="absolute bottom-24 right-4 w-12 h-12 rounded-full bg-card shadow-lg hover:bg-card"
         >
-          <MapPin className={`w-6 h-6 ${currentLocation ? "text-primary" : ""}`} />
+          <MapPin className={`w-6 h-6 ${currentPosition ? "text-primary" : ""}`} />
         </Button>
 
         {/* Online/Offline Toggle */}

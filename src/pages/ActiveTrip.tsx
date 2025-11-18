@@ -1,10 +1,10 @@
+import { useState, useEffect } from "react";
 import { Phone, MessageCircle, Navigation as NavigationIcon, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTrip } from "@/contexts/TripContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,6 +15,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useBackgroundGeolocation } from "@/hooks/useBackgroundGeolocation";
+import { useHaptics } from "@/hooks/useHaptics";
+import { ImpactStyle } from "@capacitor/haptics";
 
 const ActiveTrip = () => {
   const { activeTrip, arriveAtPickup, startTrip, completeTrip, cancelTrip } = useTrip();
@@ -22,6 +25,32 @@ const ActiveTrip = () => {
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [showCompleteDialog, setShowCompleteDialog] = useState(false);
   const [rating, setRating] = useState(5);
+  const [watcherId, setWatcherId] = useState<string | null>(null);
+  
+  const { startBackgroundTracking, stopBackgroundTracking, lastLocation } = useBackgroundGeolocation(
+    (location) => {
+      console.log("Background location update:", location);
+      // You could send this to your backend here
+    }
+  );
+  const { impact } = useHaptics();
+
+  // Start background tracking when trip starts
+  useEffect(() => {
+    if (activeTrip?.status === "started" && !watcherId) {
+      startBackgroundTracking().then((id) => {
+        if (id) {
+          setWatcherId(id);
+        }
+      });
+    }
+
+    return () => {
+      if (watcherId) {
+        stopBackgroundTracking(watcherId);
+      }
+    };
+  }, [activeTrip?.status, watcherId]);
 
   if (!activeTrip) {
     navigate("/dashboard");
@@ -29,6 +58,7 @@ const ActiveTrip = () => {
   }
 
   const handleNavigate = () => {
+    impact(ImpactStyle.Light);
     const destination = activeTrip.status === "accepted" || activeTrip.status === "arrived"
       ? activeTrip.pickup
       : activeTrip.dropoff;
