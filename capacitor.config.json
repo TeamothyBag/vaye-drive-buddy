@@ -1,0 +1,45 @@
+{
+  "appId": "app.lovable.863afb2376d04696a2213c2d9777b6f1",
+  "appName": "vaye-drive-buddy",
+  "webDir": "dist",
+  "server": {
+    "url": "https://863afb23-76d0-4696-a221-3c2d9777b6f1.lovableproject.com?forceHideBadge=true",
+    "cleartext": true
+  },
+  "plugins": {
+    "PushNotifications": {
+      "presentationOptions": ["badge", "sound", "alert"]
+    },
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_icon_config_sample",
+      "iconColor": "#FFC107"
+    },
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#001F3F",
+      "showSpinner": true,
+      "spinnerColor": "#FFC107"
+    },
+    "BackgroundGeolocation": {
+      "alwaysShow": true,
+      "notificationTitle": "Vaye Driver",
+      "notificationText": "Tracking your location",
+      "syncThreshold": 100
+    }
+  },
+  "cordova": {},
+  "android": {
+    "allowMixedContent": true,
+    "backgroundColor": "#001F3F",
+    "buildOptions": {
+      "keystorePath": "",
+      "keystorePassword": "",
+      "keystoreAlias": "",
+      "keystoreAliasPassword": ""
+    }
+  },
+  "ios": {
+    "contentInset": "automatic",
+    "backgroundColor": "#001F3F"
+  }
+}

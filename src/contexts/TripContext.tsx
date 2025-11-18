@@ -1,5 +1,8 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { toast } from "sonner";
+import { useLocalNotifications } from "@/hooks/useLocalNotifications";
+import { useHaptics } from "@/hooks/useHaptics";
+import { ImpactStyle, NotificationType } from "@capacitor/haptics";
 
 interface Passenger {
   id: string;
@@ -58,6 +61,9 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
   const [todayEarnings, setTodayEarnings] = useState(847.50);
   const [todayRides, setTodayRides] = useState(12);
 
+  const { scheduleNotification } = useLocalNotifications();
+  const { impact, notification: hapticNotification } = useHaptics();
+
   // Simulate ride request polling
   useEffect(() => {
     if (isOnline && !activeTrip && !rideRequest) {
@@ -86,6 +92,23 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
             requestTime: Date.now(),
           };
           setRideRequest(mockRequest);
+          
+          // Haptic feedback
+          impact(ImpactStyle.Heavy);
+          
+          // Local notification
+          scheduleNotification({
+            title: "New Ride Request!",
+            body: "You have 20 seconds to accept",
+            id: Date.now(),
+            schedule: { at: new Date(Date.now() + 100) },
+            sound: 'default',
+            actionTypeId: 'RIDE_REQUEST',
+            extra: {
+              rideId: mockRequest.id,
+            },
+          });
+          
           toast("New Ride Request!", {
             description: "You have 20 seconds to accept",
           });
@@ -110,6 +133,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
 
   const acceptRide = () => {
     if (rideRequest) {
+      hapticNotification(NotificationType.Success);
       setActiveTrip({
         ...rideRequest,
         status: "accepted",
@@ -121,12 +145,14 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const declineRide = () => {
+    impact(ImpactStyle.Light);
     setRideRequest(null);
     toast.info("Request declined");
   };
 
   const arriveAtPickup = () => {
     if (activeTrip) {
+      hapticNotification(NotificationType.Success);
       setActiveTrip({ ...activeTrip, status: "arrived" });
       toast.success("Marked as arrived. Waiting for passenger");
     }
@@ -134,6 +160,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
 
   const startTrip = () => {
     if (activeTrip) {
+      hapticNotification(NotificationType.Success);
       setActiveTrip({ ...activeTrip, status: "started" });
       toast.success("Trip started! Navigate to destination");
     }
@@ -141,6 +168,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
 
   const completeTrip = (rating: number) => {
     if (activeTrip) {
+      hapticNotification(NotificationType.Success);
       setTodayEarnings(prev => prev + activeTrip.fare);
       setTodayRides(prev => prev + 1);
       setActiveTrip(null);
@@ -149,6 +177,7 @@ export const TripProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const cancelTrip = () => {
+    hapticNotification(NotificationType.Warning);
     setActiveTrip(null);
     toast.error("Trip cancelled");
   };

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Camera, Star, Car, FileText, Settings as SettingsIcon, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -6,10 +7,13 @@ import BottomNav from "@/components/dashboard/BottomNav";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
+import { useCamera } from "@/hooks/useCamera";
 
 const Profile = () => {
   const navigate = useNavigate();
   const { logout, user } = useAuth();
+  const { choosePhotoSource, isLoading: cameraLoading } = useCamera();
+  const [profilePhoto, setProfilePhoto] = useState<string>("");
 
   const driverData = {
     name: user?.name || "Demo Driver",
@@ -37,6 +41,14 @@ const Profile = () => {
     toast.success("Logged out successfully");
   };
 
+  const handleChangePhoto = async () => {
+    const photo = await choosePhotoSource();
+    if (photo?.webPath) {
+      setProfilePhoto(photo.webPath);
+      toast.success("Profile photo updated");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col pb-20">
       {/* Header */}
@@ -51,7 +63,7 @@ const Profile = () => {
         <div className="glass rounded-3xl p-6 shadow-lg text-center space-y-4">
           <div className="relative inline-block">
             <Avatar className="w-24 h-24 ring-4 ring-primary">
-              <AvatarImage src="" />
+              <AvatarImage src={profilePhoto} />
               <AvatarFallback className="bg-gradient-yellow text-vaye-navy text-2xl font-bold">
                 DD
               </AvatarFallback>
@@ -59,6 +71,8 @@ const Profile = () => {
             <Button
               size="icon"
               className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-primary shadow-lg"
+              onClick={handleChangePhoto}
+              disabled={cameraLoading}
             >
               <Camera className="w-4 h-4" />
             </Button>
