@@ -1,0 +1,52 @@
+.slideContainer {
+  @apply relative h-16 rounded-full border-2 border-gray-300 bg-gray-100 overflow-hidden cursor-pointer select-none;
+}
+
+.slideContainer:hover:not(.disabled) {
+  @apply border-gray-400;
+}
+
+.slideContainer.disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+.progressBackground {
+  @apply absolute inset-0 rounded-full transition-all duration-300 opacity-30;
+  width: var(--progress-width, 0%);
+  background-color: var(--bg-color, #4CAF50);
+}
+
+.thumb {
+  @apply absolute top-1 left-1 w-14 h-14 bg-white rounded-full shadow-lg flex items-center justify-center transition-all;
+  left: var(--thumb-position, 4px);
+  background-color: var(--bg-color, #4CAF50);
+  transition: var(--thumb-transition, left 0.3s cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+.thumb:not(.disabled) {
+  @apply cursor-grab;
+}
+
+.thumb:not(.disabled):active {
+  @apply cursor-grabbing;
+}
+
+.thumb.disabled {
+  @apply cursor-not-allowed;
+}
+
+.thumb.dragging {
+  @apply scale-110 shadow-xl;
+}
+
+.thumb.notDragging {
+  @apply scale-100;
+}
+
+.thumbIcon {
+  @apply text-white text-xl font-bold pointer-events-none;
+}
+
+.textOverlay {
+  @apply absolute inset-0 flex items-center justify-center text-gray-700 font-medium pointer-events-none px-4;
+}

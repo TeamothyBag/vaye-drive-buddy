@@ -4,7 +4,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
+import { DriverStatusProvider } from "./contexts/DriverStatusContext";
 import { TripProvider } from "./contexts/TripContext";
+import { PreferencesProvider } from "./contexts/PreferencesContext";
+import { NotificationProvider } from "./contexts/NotificationContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NativeFeatures from "./components/NativeFeatures";
 import Login from "./pages/Login";
@@ -28,7 +31,10 @@ const App = () => (
       <NativeFeatures />
       <BrowserRouter>
         <AuthProvider>
-          <TripProvider>
+          <PreferencesProvider>
+            <DriverStatusProvider>
+              <TripProvider>
+                <NotificationProvider>
             <Routes>
               <Route path="/" element={<Navigate to="/login" replace />} />
               <Route path="/login" element={<Login />} />
@@ -91,7 +97,10 @@ const App = () => (
               />
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </TripProvider>
+                </NotificationProvider>
+              </TripProvider>
+            </DriverStatusProvider>
+          </PreferencesProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>

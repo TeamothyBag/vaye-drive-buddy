@@ -7,8 +7,8 @@ interface OnlineToggleProps {
 
 const OnlineToggle = ({ onGoOnline }: OnlineToggleProps) => {
   return (
-    <div className="absolute inset-x-4 bottom-24 max-w-md mx-auto">
-      <div className="glass rounded-3xl p-8 shadow-2xl text-center space-y-6">
+    <div className="max-w-md mx-auto">
+      <div className="glass rounded-3xl p-8 shadow-2xl backdrop-blur-md text-center space-y-6">
         <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-muted">
           <Power className="w-10 h-10 text-muted-foreground" />
         </div>

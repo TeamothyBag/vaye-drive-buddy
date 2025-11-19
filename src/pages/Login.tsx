@@ -9,23 +9,38 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, error: authError, clearError, isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
+  // Redirect if already authenticated
+  if (isAuthenticated) {
+    navigate("/dashboard");
+    return null;
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!formData.email || !formData.password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
     setIsLoading(true);
+    clearError();
 
     try {
       await login(formData.email, formData.password);
       toast.success("Welcome back!");
       navigate("/dashboard");
-    } catch (error) {
-      toast.error("Invalid credentials. Please try again.");
+    } catch (error: any) {
+      console.error("Login error:", error);
+      const errorMessage = error?.message || authError || "Login failed. Please try again.";
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -110,10 +125,10 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Demo Credentials */}
+        {/* VayeBack Integration Info */}
         <div className="glass rounded-xl p-4 text-center text-sm space-y-1">
-          <p className="text-muted-foreground font-medium">Demo Mode</p>
-          <p className="text-xs text-muted-foreground">Use any email/password to continue</p>
+          <p className="text-muted-foreground font-medium">Connected to VayeBack API</p>
+          <p className="text-xs text-muted-foreground">Real-time ride & delivery management</p>
         </div>
       </div>
     </div>

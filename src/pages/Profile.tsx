@@ -3,7 +3,7 @@ import { Camera, Star, Car, FileText, Settings as SettingsIcon, LogOut } from "l
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import BottomNav from "@/components/dashboard/BottomNav";
+import MobileLayout from "@/components/layout/MobileLayout";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
@@ -20,14 +20,14 @@ const Profile = () => {
     email: user?.email || "demo@vaye.com",
     phone: user?.phone || "+27 12 345 6789",
     rating: user?.rating || 4.8,
-    totalRides: 1247,
-    memberSince: "Jan 2023",
+    totalRides: user?.totalTrips || 0,
+    memberSince: user?.memberSince || "Jan 2023",
     vehicle: {
-      make: "Toyota",
-      model: "Corolla",
-      year: 2021,
-      color: "White",
-      plate: "CA 123-456",
+      make: user?.vehicle?.make || "Toyota",
+      model: user?.vehicle?.model || "Corolla",
+      year: user?.vehicle?.year || 2021,
+      color: user?.vehicle?.color || "White",
+      plate: user?.vehicle?.licensePlate || "CA 123-456",
     },
     stats: {
       totalEarnings: 125678.50,
@@ -50,15 +50,19 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col pb-20">
-      {/* Header */}
-      <header className="bg-gradient-yellow glass shadow-md px-4 py-6">
-        <h1 className="text-2xl font-bold text-vaye-navy">Profile</h1>
-        <p className="text-sm text-vaye-navy/70 mt-1">Manage your account</p>
-      </header>
-
-      {/* Profile Section */}
-      <div className="p-4 space-y-6">
+    <MobileLayout 
+      title="Profile"
+      headerAction={
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => navigate("/settings")}
+        >
+          <SettingsIcon className="h-5 w-5" />
+        </Button>
+      }
+    >
+      <div className="space-y-6">
         {/* Profile Card */}
         <div className="glass rounded-3xl p-6 shadow-lg text-center space-y-4">
           <div className="relative inline-block">
@@ -170,9 +174,7 @@ const Profile = () => {
           </Button>
         </div>
       </div>
-
-      <BottomNav />
-    </div>
+    </MobileLayout>
   );
 };
 
