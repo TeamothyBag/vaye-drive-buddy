@@ -1,4 +1,5 @@
 import config from "../config";
+import { authStorage } from './storageService';
 
 // User preferences interface
 export interface UserPreferences {
@@ -18,11 +19,8 @@ export interface PreferencesResponse {
 }
 
 class PreferencesService {
-  private getAuthHeaders(): Record<string, string> {
-    // Check multiple possible token keys for compatibility
-    const token = localStorage.getItem('auth_token') || 
-                  localStorage.getItem('vaye_token') || 
-                  localStorage.getItem('token');
+  private async getAuthHeaders(): Promise<Record<string, string>> {
+    const token = await authStorage.getToken();
     
     if (!token) {
       throw new Error('No authentication token found');
@@ -41,7 +39,7 @@ class PreferencesService {
 
       const response = await fetch(`${config.apiBaseUrl}/api/auth/users/preferences`, {
         method: 'GET',
-        headers: this.getAuthHeaders()
+        headers: await this.getAuthHeaders()
       });
 
       if (!response.ok) {
@@ -67,7 +65,7 @@ class PreferencesService {
 
       const response = await fetch(`${config.apiBaseUrl}/api/auth/users/preferences`, {
         method: 'PUT',
-        headers: this.getAuthHeaders(),
+        headers: await this.getAuthHeaders(),
         body: JSON.stringify({ preferences })
       });
 

@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useCallback, ReactNode, useEffect } from "react";
 import { useAuth } from "./AuthContext";
 import driverSocketService from "@/services/DriverSocketService";
+import { storageService } from "@/services/storageService";
 import { toast } from "sonner";
 
 interface Notification {
@@ -40,13 +41,27 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
   const { user, isAuthenticated } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
+  // Initialize FCM token using centralized function
+  const initializeFCMToken = useCallback(async () => {
+    if (!user?._id && !user?.userId) return;
+
+    try {
+      // Use the centralized initializePushNotifications function
+      const { initializePushNotifications } = await import("../firebase");
+      await initializePushNotifications();
+      console.log('📱 [NOTIFICATION_CONTEXT] FCM token registered');
+    } catch (error) {
+      console.error('❌ [NOTIFICATION_CONTEXT] Error initializing FCM token:', error);
+    }
+  }, [user?._id, user?.userId]);
+
   // Initialize notifications from local storage
   const initializeNotifications = useCallback(async () => {
     if (!user?._id && !user?.userId) return;
     
     try {
       const userId = user._id || user.userId;
-      const storedNotifications = localStorage.getItem(`vaye_notifications_${userId}`);
+      const storedNotifications = await storageService.get(`vaye_notifications_${userId}`);
       if (storedNotifications) {
         const parsed = JSON.parse(storedNotifications).map((notif: any) => ({
           ...notif,
@@ -64,15 +79,19 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
 
   // Save notifications to local storage
   useEffect(() => {
-    if (notifications.length > 0 && (user?._id || user?.userId)) {
-      try {
-        const userId = user._id || user.userId;
-        const notificationsToStore = notifications.slice(0, 50);
-        localStorage.setItem(`vaye_notifications_${userId}`, JSON.stringify(notificationsToStore));
-      } catch (error) {
-        console.error('❌ [NOTIFICATION_CONTEXT] Error saving notifications:', error);
+    const saveNotifications = async () => {
+      if (notifications.length > 0 && (user?._id || user?.userId)) {
+        try {
+          const userId = user._id || user.userId;
+          const notificationsToStore = notifications.slice(0, 50);
+          await storageService.setJSON(`vaye_notifications_${userId}`, notificationsToStore);
+        } catch (error) {
+          console.error('❌ [NOTIFICATION_CONTEXT] Error saving notifications:', error);
+        }
       }
-    }
+    };
+    
+    saveNotifications();
   }, [notifications, user?._id, user?.userId]);
 
   // Add notification function
@@ -180,6 +199,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
       console.log('🔌 [NOTIFICATION_CONTEXT] Setting up socket listeners');
       
       initializeNotifications();
+      initializeFCMToken();
       
       // Register socket event listeners
       driverSocketService.addEventListener('driverNotification', handleDriverNotification);
@@ -197,7 +217,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
         console.log('🔌 [NOTIFICATION_CONTEXT] Socket listeners cleaned up');
       };
     }
-  }, [isAuthenticated, initializeNotifications, handleDriverNotification, handleRideRequest, handleTripUpdate, handleDeliveryAssigned]);
+  }, [isAuthenticated, initializeNotifications, initializeFCMToken, handleDriverNotification, handleRideRequest, handleTripUpdate, handleDeliveryAssigned]);
 
   // Utility functions
   const markAsRead = useCallback((id: string) => {
@@ -214,11 +234,11 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
     setNotifications(prev => prev.filter(notif => notif.id !== id));
   }, []);
 
-  const clearAllNotifications = useCallback(() => {
+  const clearAllNotifications = useCallback(async () => {
     setNotifications([]);
     if (user?._id || user?.userId) {
       const userId = user._id || user.userId;
-      localStorage.removeItem(`vaye_notifications_${userId}`);
+      await storageService.remove(`vaye_notifications_${userId}`);
     }
   }, [user?._id, user?.userId]);
 

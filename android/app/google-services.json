@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "590811694761",
+    "project_id": "tribaal-2bca5",
+    "storage_bucket": "tribaal-2bca5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:590811694761:android:vaye_driver_android",
+        "android_client_info": {
+          "package_name": "com.vaye.driverbuddy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwyDMlYefuoHgCsUP00vVG2jW-2p9jO7E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -22,6 +22,7 @@ export const usePushNotifications = (onNotificationReceived?: (data: any) => voi
         }
 
         // Register with Apple / Google
+        console.log('🔔 Registering for push notifications...');
         await PushNotifications.register();
 
         // Listen for registration

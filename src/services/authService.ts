@@ -116,9 +116,9 @@ export async function login(
 
     const data: AuthResponse = await response.json();
     
-    // Store authentication data
-    localStorage.setItem("vaye_token", data.token);
-    localStorage.setItem("vaye_user", JSON.stringify(data.user));
+    // Store authentication data securely (this is redundant as AuthContext also stores it)
+    // await authStorage.setToken(data.token);
+    // await authStorage.setUserData(data.user);
     
     // Call success callback if provided
     if (onLoginSuccess) {
@@ -155,11 +155,8 @@ export async function logout(
   } catch (error) {
     console.warn("Server logout error:", error);
   } finally {
-    // Always clear local storage regardless of server response
-    localStorage.removeItem("vaye_token");
-    sessionStorage.removeItem("vaye_token");
-    localStorage.removeItem("vaye_user");
-    sessionStorage.removeItem("vaye_user");
+    // Always clear secure storage regardless of server response
+    await authStorage.clearAuth();
     
     // Call success callback
     if (onLogoutSuccess) {
@@ -169,15 +166,14 @@ export async function logout(
 }
 
 // Get stored auth data
-export function getStoredAuth(): { user: User | null; token: string | null } {
+export async function getStoredAuth(): Promise<{ user: User | null; token: string | null }> {
   try {
-    const token = localStorage.getItem("vaye_token");
-    const userStr = localStorage.getItem("vaye_user");
-    const user = userStr ? JSON.parse(userStr) : null;
+    const token = await authStorage.getToken();
+    const user = await authStorage.getUserData<User>();
     
-    return { user, token };
+    return { user: user || null, token };
   } catch (error) {
-    console.error("Error retrieving stored auth:", error);
+    console.error("Error getting stored auth data:", error);
     return { user: null, token: null };
   }
 }
@@ -203,9 +199,6 @@ export function isTokenValid(token: string | null): boolean {
 }
 
 // Clear auth data
-export function clearAuthData(): void {
-  localStorage.removeItem("vaye_token");
-  sessionStorage.removeItem("vaye_token");
-  localStorage.removeItem("vaye_user");
-  sessionStorage.removeItem("vaye_user");
+export async function clearAuthData(): Promise<void> {
+  await authStorage.clearAuth();
 }

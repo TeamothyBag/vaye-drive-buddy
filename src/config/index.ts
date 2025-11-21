@@ -9,10 +9,11 @@ export interface ApiConfig {
 
 const config: ApiConfig = {
   // VayeBack API base URL - matches Driver-FrontEnd configuration
-  apiBaseUrl: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000',
+  // Use your computer's actual IP address for Android emulator access
+  apiBaseUrl: import.meta.env.VITE_API_BASE_URL || 'http://192.168.100.18:5000',
   
-  // Socket.io URL - same as VayeBack server
-  socketUrl: import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000',
+  // Socket.io URL - same as VayeBack server  
+  socketUrl: import.meta.env.VITE_SOCKET_URL || 'http://192.168.100.18:5000',
   
   // Google Maps configuration - shared across Vaye platform
   GoogleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'AIzaSyDPmgYmKhagLqDqopG1ve9pry2mz8sIF8k',

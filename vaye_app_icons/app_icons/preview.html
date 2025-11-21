@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaye App Icons - Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+        
+        .section {
+            margin-bottom: 3rem;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #F4CE37;
+            display: inline-block;
+        }
+        
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .icon-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .icon-wrapper {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.75rem;
+            background: white;
+            border-radius: 8px;
+            padding: 0.5rem;
+        }
+        
+        .icon-wrapper img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .icon-label {
+            font-size: 0.85rem;
+            color: #555;
+            text-align: center;
+            word-break: break-word;
+        }
+        
+        .icon-size {
+            font-size: 0.75rem;
+            color: #999;
+            margin-top: 0.25rem;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .platform-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: #F4CE37;
+            color: #2c3e50;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        
+        .dark-bg {
+            background: #2c3e50;
+        }
+        
+        .light-bg {
+            background: white;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 1.75rem;
+            }
+            
+            .icon-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Vaye App Icons</h1>
+        <p class="subtitle">Complete icon package for iOS, Android, and Web</p>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">44</div>
+                <div class="stat-label">Total Icons</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">21</div>
+                <div class="stat-label">iOS Sizes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">15</div>
+                <div class="stat-label">Android Sizes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">8</div>
+                <div class="stat-label">Web/PWA Icons</div>
+            </div>
+        </div>
+        
+        <!-- iOS Icons -->
+        <div class="section">
+            <h2>📱 iOS App Icons<span class="platform-badge">iOS</span></h2>
+            <div class="icon-grid">
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <img src="ios/Icon-App-1024x1024@1x.png" alt="iOS App Store">
+                    </div>
+                    <div class="icon-label">App Store</div>
+                    <div class="icon-size">1024x1024</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <img src="ios/Icon-App-60x60@3x.png" alt="iOS iPhone App">
+                    </div>
+                    <div class="icon-label">iPhone App</div>
+                    <div class="icon-size">180x180 (@3x)</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <img src="ios/Icon-App-60x60@2x.png" alt="iOS iPhone App">
+                    </div>
+                    <div class="icon-label">iPhone App</div>
+                    <div class="icon-size">120x120 (@2x)</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <img src="ios/Icon-App-76x76@2x.png" alt="iOS iPad App">
+                    </div>
+                    <div class="icon-label">iPad App</div>
+                    <div class="icon-size">152x152 (@2x)</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <img src="ios/Icon-App-40x40@3x.png" alt="iOS Spotlight">
+                    </div>
+                    <div class="icon-label">Spotlight</div>
+                    <div class="icon-size">120x120 (@3x)</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <img src="ios/Icon-App-29x29@3x.png" alt="iOS Settings">
+                    </div>
+                    <div class="icon-label">Settings</div>
+                    <div class="icon-size">87x87 (@3x)</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Android Icons -->
+        <div class="section">
+            <h2>🤖 Android App Icons<span class="platform-badge">Android</span></h2>
+            <div class="icon-grid">
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <img src="android/mipmap-xxxhdpi/ic_launcher.png" alt="Android xxxhdpi">
+                    </div>
+                    <div class="icon-label">Launcher</div>
+                    <div class="icon-size">192x192 (xxxhdpi)</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <img src="android/mipmap-xxhdpi/ic_launcher.png" alt="Android xxhdpi">
+                    </div>
+                    <div class="icon-label">Launcher</div>
+                    <div class="icon-size">144x144 (xxhdpi)</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <img src="android/mipmap-xhdpi/ic_launcher.png" alt="Android xhdpi">
+                    </div>
+                    <div class="icon-label">Launcher</div>
+                    <div class="icon-size">96x96 (xhdpi)</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <img src="android/mipmap-xxxhdpi/ic_launcher_round.png" alt="Android Round">
+                    </div>
+                    <div class="icon-label">Round Launcher</div>
+                    <div class="icon-size">192x192 (xxxhdpi)</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper dark-bg">
+                        <img src="android/mipmap-xxxhdpi/ic_launcher_foreground.png" alt="Android Foreground">
+                    </div>
+                    <div class="icon-label">Adaptive Foreground</div>
+                    <div class="icon-size">432x432 (xxxhdpi)</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <img src="android/mipmap-hdpi/ic_launcher.png" alt="Android hdpi">
+                    </div>
+                    <div class="icon-label">Launcher</div>
+                    <div class="icon-size">72x72 (hdpi)</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Web Icons -->
+        <div class="section">
+            <h2>🌐 Web/PWA Icons<span class="platform-badge">Web</span></h2>
+            <div class="icon-grid">
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <img src="web/icon-512.png" alt="Web 512">
+                    </div>
+                    <div class="icon-label">PWA Icon</div>
+                    <div class="icon-size">512x512</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <img src="web/icon-192.png" alt="Web 192">
+                    </div>
+                    <div class="icon-label">PWA Icon</div>
+                    <div class="icon-size">192x192</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <img src="web/apple-touch-icon.png" alt="Apple Touch">
+                    </div>
+                    <div class="icon-label">Apple Touch Icon</div>
+                    <div class="icon-size">180x180</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <img src="web/favicon-48x48.png" alt="Favicon 48">
+                    </div>
+                    <div class="icon-label">Favicon</div>
+                    <div class="icon-size">48x48</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <img src="web/favicon-32x32.png" alt="Favicon 32">
+                    </div>
+                    <div class="icon-label">Favicon</div>
+                    <div class="icon-size">32x32</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon-wrapper">
+                        <img src="web/favicon-16x16.png" alt="Favicon 16">
+                    </div>
+                    <div class="icon-label">Favicon</div>
+                    <div class="icon-size">16x16</div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 2px solid #ecf0f1; color: #7f8c8d;">
+            <p><strong>All icons ready for deployment!</strong></p>
+            <p style="margin-top: 0.5rem;">Check the README.md for detailed integration instructions</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { 
   login as apiLogin, 
   logout as apiLogout, 
-  getStoredAuth, 
   isTokenValid,
   User as ApiUser 
 } from "../services/authService";
+import { authStorage, storageService } from "../services/storageService";
 import driverSocketService from "../services/DriverSocketService";
 import config from "../config";
 
@@ -78,53 +78,65 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     // Check for existing session and validate token
-    const { user: storedUser, token: storedToken } = getStoredAuth();
+    const initializeAuth = async () => {
+      try {
+        // Migrate old localStorage data to secure storage
+        await storageService.migrateFromLocalStorage();
+        
+        const storedToken = await authStorage.getToken();
+        const storedUser = await authStorage.getUserData();
 
-    if (storedToken && storedUser && isTokenValid(storedToken)) {
-      setToken(storedToken);
-      
-      // Cast and normalize stored user data
-      const anyUser = storedUser as any;
-      const normalizedUser: User = {
-        userId: anyUser.userId || anyUser._id,
-        name: anyUser.name || anyUser.fullName,
-        email: anyUser.email,
-        role: anyUser.role,
-        phone: anyUser.phone || anyUser.phoneNumber,
-        rating: anyUser.rating || anyUser.averageRating,
-        totalTrips: anyUser.totalTrips,
-        profileImage: anyUser.profileImage || anyUser.profilePicture,
-        vehicle: anyUser.vehicle || (anyUser.vehicleDetails ? {
-          make: anyUser.vehicleDetails.make || '',
-          model: anyUser.vehicleDetails.model || '',
-          year: anyUser.vehicleDetails.year || 0,
-          color: anyUser.vehicleDetails.color || '',
-          licensePlate: anyUser.vehicleDetails.licensePlate || '',
-        } : null),
-        // Legacy compatibility
-        _id: anyUser.userId || anyUser._id,
-        fullName: anyUser.name || anyUser.fullName,
-        userType: anyUser.userType,
-        phoneNumber: anyUser.phone || anyUser.phoneNumber,
-        averageRating: anyUser.rating || anyUser.averageRating,
-        isAvailable: anyUser.isAvailable,
-        location: anyUser.location,
-        profilePicture: anyUser.profileImage || anyUser.profilePicture,
-        vehicleDetails: anyUser.vehicleDetails,
-      };
-      
-      setUser(normalizedUser);
-      
-      // Initialize socket connection for authenticated user
-      driverSocketService.connect(storedToken, normalizedUser.userId || normalizedUser._id);
-      driverSocketService.joinDriverRoom();
-    } else {
-      // Clear invalid/expired session
-      localStorage.removeItem("vaye_token");
-      localStorage.removeItem("vaye_user");
-    }
+        if (storedToken && storedUser && isTokenValid(storedToken)) {
+          setToken(storedToken);
+          
+          // Cast and normalize stored user data
+          const anyUser = storedUser as any;
+          const normalizedUser: User = {
+            userId: anyUser.userId || anyUser._id,
+            name: anyUser.name || anyUser.fullName,
+            email: anyUser.email,
+            role: anyUser.role,
+            phone: anyUser.phone || anyUser.phoneNumber,
+            rating: anyUser.rating || anyUser.averageRating,
+            totalTrips: anyUser.totalTrips,
+            profileImage: anyUser.profileImage || anyUser.profilePicture,
+            vehicle: anyUser.vehicle || (anyUser.vehicleDetails ? {
+              make: anyUser.vehicleDetails.make || '',
+              model: anyUser.vehicleDetails.model || '',
+              year: anyUser.vehicleDetails.year || 0,
+              color: anyUser.vehicleDetails.color || '',
+              licensePlate: anyUser.vehicleDetails.licensePlate || '',
+            } : null),
+            // Legacy compatibility
+            _id: anyUser.userId || anyUser._id,
+            fullName: anyUser.name || anyUser.fullName,
+            userType: anyUser.userType,
+            phoneNumber: anyUser.phone || anyUser.phoneNumber,
+            averageRating: anyUser.rating || anyUser.averageRating,
+            isAvailable: anyUser.isAvailable,
+            location: anyUser.location,
+            profilePicture: anyUser.profileImage || anyUser.profilePicture,
+            vehicleDetails: anyUser.vehicleDetails,
+          };
+          
+          setUser(normalizedUser);
+          
+          // Initialize socket connection for authenticated user
+          driverSocketService.connect(storedToken, normalizedUser.userId || normalizedUser._id);
+          driverSocketService.joinDriverRoom();
+        } else {
+          // Clear invalid/expired session
+          await authStorage.clearAuth();
+        }
+      } catch (error) {
+        console.error('Auth initialization error:', error);
+        await authStorage.clearAuth();
+      } finally {
+        setIsLoading(false);
+      }
+    };
     
-    setIsLoading(false);
+    initializeAuth();
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -167,9 +179,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } : undefined
       };
       
-      // Store auth data
-      localStorage.setItem('auth_token', response.token);
-      localStorage.setItem('user_data', JSON.stringify(normalizedUser));
+      // Store auth data securely
+      await authStorage.setToken(response.token);
+      await authStorage.setUserData(normalizedUser);
       
       setToken(response.token);
       setUser(normalizedUser);
@@ -177,6 +189,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Initialize socket connection
       driverSocketService.connect(response.token, normalizedUser.userId);
       driverSocketService.joinDriverRoom();
+      
+      // Initialize push notifications after successful login
+      try {
+        const { initializePushNotifications } = await import("../firebase");
+        await initializePushNotifications();
+      } catch (error) {
+        console.warn("⚠️ Push notifications initialization failed:", error);
+      }
       
       console.log("✅ Login successful:", normalizedUser.name);
     } catch (err: any) {
@@ -252,7 +272,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         };
         
         setUser(normalizedUser);
-        localStorage.setItem('user_data', JSON.stringify(normalizedUser));
+        await authStorage.setUserData(normalizedUser);
         
         console.log("✅ User data refreshed successfully");
       }
@@ -271,6 +291,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Disconnect socket first
       driverSocketService.disconnect();
       
+      // Clear secure storage first
+      await authStorage.clearAuth();
+      
       // Call API logout
       await apiLogout(() => {
         setToken(null);
@@ -282,7 +305,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.log("✅ Logout successful");
     } catch (err: any) {
       console.error("❌ Logout error:", err.message);
-      // Still clear local data even if API call fails
+      // Still clear local data and storage even if API call fails
+      await authStorage.clearAuth();
       setToken(null);
       setUser(null);
       setError(null);

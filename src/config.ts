@@ -1,7 +1,7 @@
 const config = {
   // API Configuration
-  apiBaseUrl: 'http://localhost:5000', // VayeBack API URL
-  socketUrl: 'http://localhost:5000', // Socket.io URL (same as API)
+  apiBaseUrl: 'http://192.168.100.18:5000', // VayeBack API URL
+  socketUrl: 'http://192.168.100.18:5000', // Socket.io URL (same as API)
   
   // Google Maps Configuration
   GoogleMapsApiKey: 'AIzaSyDPmgYmKhagLqDqopG1ve9pry2mz8sIF8k',

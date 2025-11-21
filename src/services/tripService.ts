@@ -1,4 +1,5 @@
 import config from "../config";
+import { authStorage } from './storageService';
 
 // Trip data types based on VayeBack API response
 export interface Trip {
@@ -49,11 +50,8 @@ export interface TripFilters {
 }
 
 class TripService {
-  private getAuthHeaders() {
-    // Check multiple possible token storage keys for compatibility
-    const token = localStorage.getItem('auth_token') || 
-                  localStorage.getItem('vaye_token') ||
-                  localStorage.getItem('token');
+  private async getAuthHeaders(): Promise<Record<string, string>> {
+    const token = await authStorage.getToken();
     
     if (!token) {
       throw new Error('No authentication token found');
@@ -83,7 +81,7 @@ class TripService {
 
       const response = await fetch(url, {
         method: 'GET',
-        headers: this.getAuthHeaders()
+        headers: await this.getAuthHeaders()
       });
 
       if (!response.ok) {
@@ -137,7 +135,7 @@ class TripService {
 
       const response = await fetch(url, {
         method: 'GET',
-        headers: this.getAuthHeaders()
+        headers: await this.getAuthHeaders()
       });
 
       if (!response.ok) {
@@ -162,9 +160,9 @@ class TripService {
   // Get ride statistics
   async getRideStats(): Promise<any> {
     try {
-      const response = await fetch(`${config.apiBaseUrl}/api/rides/history/stats`, {
+      const response = await fetch(`${config.apiBaseUrl}/api/drivers/active-ride`, {
         method: 'GET',
-        headers: this.getAuthHeaders()
+        headers: await this.getAuthHeaders()
       });
 
       if (!response.ok) {

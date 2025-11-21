@@ -1,4 +1,5 @@
 import config from "../config";
+import { authStorage } from './storageService';
 
 // Earnings data types based on VayeBack API response
 export interface DailyEarning {
@@ -30,11 +31,8 @@ export interface EarningsParams {
 }
 
 class EarningsService {
-  private getAuthHeaders(): Record<string, string> {
-    // Check multiple possible token keys for compatibility
-    const token = localStorage.getItem('auth_token') || 
-                  localStorage.getItem('vaye_token') || 
-                  localStorage.getItem('token');
+  private async getAuthHeaders(): Promise<Record<string, string>> {
+    const token = await authStorage.getToken();
     
     if (!token) {
       throw new Error('No authentication token found');
@@ -74,7 +72,7 @@ class EarningsService {
 
       const response = await fetch(`${config.apiBaseUrl}/api/drivers/earnings?period=${apiPeriod}`, {
         method: 'GET',
-        headers: this.getAuthHeaders()
+        headers: await this.getAuthHeaders()
       });
 
       if (!response.ok) {
@@ -112,7 +110,7 @@ class EarningsService {
     try {
       const response = await fetch(`${config.apiBaseUrl}/api/wallet/current`, {
         method: 'GET',
-        headers: this.getAuthHeaders()
+        headers: await this.getAuthHeaders()
       });
 
       if (!response.ok) {

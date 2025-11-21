@@ -1,11 +1,9 @@
 {
-  "appId": "app.lovable.863afb2376d04696a2213c2d9777b6f1",
-  "appName": "vaye-drive-buddy",
+  "appId": "com.vaye.driverbuddy",
+  "appName": "Vaye Driver",
   "webDir": "dist",
-  "server": {
-    "url": "https://863afb23-76d0-4696-a221-3c2d9777b6f1.lovableproject.com?forceHideBadge=true",
-    "cleartext": true
-  },
+  "bundledWebRuntime": false,
+
   "plugins": {
     "PushNotifications": {
       "presentationOptions": ["badge", "sound", "alert"]
@@ -15,10 +13,17 @@
       "iconColor": "#FFC107"
     },
     "SplashScreen": {
-      "launchShowDuration": 2000,
-      "backgroundColor": "#001F3F",
-      "showSpinner": true,
-      "spinnerColor": "#FFC107"
+      "launchShowDuration": 3000,
+      "launchAutoHide": true,
+      "backgroundColor": "#FFC107",
+      "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": false,
+      "androidSpinnerStyle": "large",
+      "iosSpinnerStyle": "small",
+      "spinnerColor": "#001F3F",
+      "splashFullScreen": true,
+      "splashImmersive": true
     },
     "BackgroundGeolocation": {
       "alwaysShow": true,
@@ -30,16 +35,25 @@
   "cordova": {},
   "android": {
     "allowMixedContent": true,
-    "backgroundColor": "#001F3F",
+    "backgroundColor": "#FFC107",
+    "webContentsDebuggingEnabled": true,
+    "appendUserAgent": "VayeDriver",
+    "overrideUserAgent": "VayeDriver/1.0",
     "buildOptions": {
       "keystorePath": "",
       "keystorePassword": "",
       "keystoreAlias": "",
-      "keystoreAliasPassword": ""
+      "keystoreAliasPassword": "",
+      "releaseType": "APK"
     }
   },
   "ios": {
-    "contentInset": "automatic",
-    "backgroundColor": "#001F3F"
+    "contentInset": "automatic", 
+    "backgroundColor": "#FFC107",
+    "webContentsDebuggingEnabled": true,
+    "appendUserAgent": "VayeDriver",
+    "overrideUserAgent": "VayeDriver/1.0",
+    "scheme": "App",
+    "limitsNavigationsToAppBoundDomains": true
   }
 }

@@ -1,0 +1,17 @@
+<svg width="1242" height="2208" viewBox="0 0 1242 2208" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Yellow background -->
+  <rect width="1242" height="2208" fill="#FFC107"/>
+  
+  <!-- Center the logo -->
+  <g transform="translate(371, 854)">
+    <!-- Vaye logo centered -->
+    <text x="250" y="250" font-family="Arial, sans-serif" font-size="180" font-weight="bold" fill="white" stroke="white" stroke-width="12" text-anchor="middle">vaye</text>
+    <text x="250" y="250" font-family="Arial, sans-serif" font-size="180" font-weight="bold" fill="#2B1B5A" text-anchor="middle">vaye</text>
+    
+    <!-- Driver subtitle -->
+    <text x="250" y="350" font-family="Arial, sans-serif" font-size="48" font-weight="normal" fill="#2B1B5A" text-anchor="middle" opacity="0.8">DRIVER</text>
+  </g>
+  
+  <!-- Bottom tagline -->
+  <text x="621" y="1800" font-family="Arial, sans-serif" font-size="32" font-weight="normal" fill="#2B1B5A" text-anchor="middle" opacity="0.6">Your Journey Partner</text>
+</svg>
